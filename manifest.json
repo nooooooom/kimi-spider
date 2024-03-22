@@ -1,0 +1,17 @@
+{
+  "name": "Kimi Spider",
+  "version": "1.0",
+  "description": "",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.js"]
+    }
+  ],
+  "permissions": ["alarms"],
+  "action": {}
+}
