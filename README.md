@@ -15,7 +15,7 @@
 
 #### 模拟用户登录状态访问网站，并解读网站内容 ✅
 
-- 浏览器中通常使用 **IFrame**、**创建页签**或**创建窗口**的方式访问网页。[经尝试](./iframe.html) IFrame 进行内容访问时，会收到浏览器同源策略的限制，导致无法模拟用户的登录状态。然而创建页签或窗口的方式与用户手动打开页面的模式一致，不会受到安全策略的约束，具体如下：
+- 浏览器中通常使用 **IFrame**、**创建页签**或**创建窗口**的方式访问网页。[经尝试](./iframe.html)， IFrame 在进行接口请求时，会受到浏览器同源策略的限制，导致无法模拟用户的登录状态。然而创建页签或窗口的方式与用户手动打开页面的模式一致，不会受到安全策略的约束，具体如下：
 
   - 创建页签：通过 [chrome.tabs.create](https://developer.chrome.com/docs/extensions/reference/api/tabs#method-create) 创建页签。如果要实现无感创建 ❔，需要具体考察 `active`、`windowId` 两个属性所带来的表现形式。
   - 创建窗口：通过 [chrome.window.create](https://developer.chrome.com/docs/extensions/reference/api/windows#method-create) 创建新窗口：如果要实现无感创建 ❔，需要具体考察 `focused`、`width`、`height`、`left`、`top`、`state` 几个属性的所带来的表现形式。
@@ -27,7 +27,7 @@
 
 #### 已获取内容的传输 ✅
 
-浏览器插件支持页面与插件进行通信，以及跨页签消息传递，结合两处功能将爬取内容传送至服务端：
+浏览器插件支持页面与插件进行通信，以及跨页签消息传递，结合两者便能将获取到内容传送至服务端：
 
 - 页面与插件通信：通过设置[externally_connectable](https://developer.chrome.com/docs/extensions/develop/concepts/messaging?hl=zh-cn#external-webpage)，内容脚本通过 [runtime.sendMessage()](https://developer.chrome.com/docs/extensions/reference/api/runtime?hl=zh-cn#method-sendMessage) 向插件传递 JSON 序列化内容。
 - 跨页签消息传递：插件通过 [chrome.tabs.sendMessage](https://developer.chrome.com/docs/extensions/reference/api/tabs?hl=zh-cn#method-sendMessage) 向指定页签传递 JSON 序列化内容。
@@ -41,8 +41,8 @@
 尽管进行了深入的研究和尝试，但最终得出的结论是，使用前端技术替代服务端进行网页内容爬取的方案在实际应用中存在诸多问题:
 
 1. **用户体验差**：无法达到无感创建页签/窗口的效果，用户体验差。
-2. **效率低，并且难以优化**：爬取效率受用户网络和硬件配置影响，难以优化。
-3. **流程繁琐，容易受到用户环境影响**：爬取后的数据需传输至服务端，增加了服务端负担，且容易受用户环境影响。
+2. **效率低，并且难以优化**：爬取效率受用户网络和硬件配置影响，且难以优化。
+3. **流程繁琐，容易受到用户环境影响**：获取的数据需传输至服务端，增加了服务端负担，且容易受用户环境影响。
 4. **用户体验不一致**：Kimi 目前支持通过续流的方式恢复突然中断的对话，但在页面关闭后前端的爬取能力将会受影响，这会在一定程度上导致两次对话的结果存在较大差别。
 5. **用户隐私难以保证**：搜索引擎可能涉及用户画像，影响用户在其他产品的使用体验。
 
